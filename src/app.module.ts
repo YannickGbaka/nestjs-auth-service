@@ -7,6 +7,8 @@ import { UsersModule } from './users/users.module';
 import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
 import { User } from './users/user.entity';
+import { AuthModule } from './auth/auth.module';
+import { ClearService } from './clear/clear.service';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -33,8 +35,9 @@ const ENV = process.env.NODE_ENV || 'development';
       load: [databaseConfig, appConfig],
     }),
     UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ClearService],
 })
 export class AppModule {}

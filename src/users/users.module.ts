@@ -8,6 +8,7 @@ import { HashingProvider } from 'src/auth/hashing.provider';
 
 @Module({
   controllers: [UsersController],
+  exports: [UsersService],
   providers: [
     UsersService,
     BcryptHashingProvider,
