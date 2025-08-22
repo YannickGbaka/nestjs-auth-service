@@ -3,8 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from './users/users.module';
 import databaseConfig from './config/database.config';
 import appConfig from './config/app.config';
+import { User } from './users/user.entity';
 
 const ENV = process.env.NODE_ENV || 'development';
 
@@ -22,7 +24,7 @@ const ENV = process.env.NODE_ENV || 'development';
         password: configService.get('database.password'),
         synchronize: configService.get('database.synchronize'),
         autoLoadEntities: configService.get('database.autoLoadEntities'),
-        entities: [],
+        entities: [User],
       }),
     }),
     ConfigModule.forRoot({
@@ -30,6 +32,7 @@ const ENV = process.env.NODE_ENV || 'development';
       envFilePath: `.env.${ENV}`,
       load: [databaseConfig, appConfig],
     }),
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
