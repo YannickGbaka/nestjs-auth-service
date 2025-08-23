@@ -52,7 +52,7 @@ export class UsersService {
 
   async updateUser(body, id: number) {
     try {
-      const user = await this.findUser(id);
+      const user = await this.findById(id);
 
       if (!user) {
         throw new NotFoundException();
@@ -77,7 +77,7 @@ export class UsersService {
 
   async deleteUser(id: number) {
     try {
-      const user = await this.findUser(id);
+      const user = await this.findById(id);
       if (!user) {
         throw new NotFoundException('User was not found');
       }
@@ -88,7 +88,11 @@ export class UsersService {
     }
   }
 
-  async findUser(id: number): Promise<User | null> {
+  async findById(id: number): Promise<User | null> {
     return await this.userReposistory.findOneBy({ id });
+  }
+
+  async findByEmail(email: string) {
+    return await this.userReposistory.findOneBy({ email });
   }
 }

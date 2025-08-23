@@ -9,13 +9,19 @@ import appConfig from './config/app.config';
 import { User } from './users/user.entity';
 import { AuthModule } from './auth/auth.module';
 import { ClearService } from './clear/clear.service';
+import { JwtModule } from '@nestjs/jwt';
+import authConfig from './auth/config/auth.config';
 
 const ENV = process.env.NODE_ENV || 'development';
 
 @Module({
   imports: [
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [
+        ConfigModule,
+        // ConfigModule.forFeature(authConfig),
+        // JwtModule.registerAsync(authConfig.asProvider()),
+      ],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
