@@ -1,14 +1,6 @@
-import {
-  ValidateIf,
-  IsNotEmpty,
-  IsString,
-  IsOptional,
-  IsDateString,
-  IsEnum,
-} from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsEnum } from 'class-validator';
 import { CreateUserDto } from './create-user.dto';
-import { IntersectionType, PartialType } from '@nestjs/mapped-types';
-import { IsNull } from 'typeorm';
+import { PartialType } from '@nestjs/mapped-types';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsOptional()

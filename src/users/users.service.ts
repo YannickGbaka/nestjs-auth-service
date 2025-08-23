@@ -9,7 +9,6 @@ import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { BcryptHashingProvider } from 'src/auth/bcrypt-hashing.provider';
-import { UpdateUserDto } from './dtos/update-user.dto';
 import { HashingProvider } from 'src/auth/hashing.provider';
 
 @Injectable()
@@ -20,44 +19,76 @@ export class UsersService {
     protected readonly hashingProvider: HashingProvider,
   ) {}
   async getUsers() {
-    return this.userReposistory.find();
+    try {
+      return this.userReposistory.find();
+    } catch (error) {
+      console.log(error.message);
+      throw new Error('Something unexpected happended, please try out later');
+    }
   }
 
   async createUser(createUserDto: CreateUserDto) {
-    const existingUser = await this.userReposistory.findOne({
-      where: { email: createUserDto.email },
-    });
+    try {
+      const existingUser = await this.userReposistory.findOne({
+        where: { email: createUserDto.email },
+      });
 
-    if (existingUser) {
-      throw new ForbiddenException('User already exist');
+      if (existingUser) {
+        throw new ForbiddenException('User already exist');
+      }
+
+      createUserDto.password = await this.hashingProvider.hashPassword(
+        createUserDto.password,
+      );
+      const userObject = this.userReposistory.create(createUserDto);
+
+      const newUser = await this.userReposistory.save(userObject);
+      return newUser;
+    } catch (error) {
+      console.log(error);
+      throw new Error('Something unexpected happened, please try out later');
     }
-
-    createUserDto.password = await this.bcryptProvider.hashPassword(
-      createUserDto.password,
-    );
-    const userObject = this.userReposistory.create(createUserDto);
-
-    const newUser = await this.userReposistory.save(userObject);
-    return newUser;
   }
 
   async updateUser(body, id: number) {
-    const user = await this.userReposistory.findOneBy({ id });
-    console.log(user);
-    if (!user) {
-      throw new NotFoundException();
+    try {
+      const user = await this.findUser(id);
+
+      if (!user) {
+        throw new NotFoundException();
+      }
+
+      user.birthDate = body.birthDate ?? user.birthDate;
+      user.email = body.email ?? user.email;
+      user.firstName = body.firstName ?? user.firstName;
+      user.lastName = body.lastName ?? user.lastName;
+      user.role = body.role ?? user.role;
+
+      user.password = await this.hashingProvider.hashPassword(
+        user.password ?? body.password,
+      );
+
+      return this.userReposistory.save(user);
+    } catch (error) {
+      console.log(error.message);
+      throw new Error('Something unexpected happended');
     }
+  }
 
-    user.birthDate = body.birthDate ?? user.birthDate;
-    user.email = body.email ?? user.email;
-    user.firstName = body.firstName ?? user.firstName;
-    user.lastName = body.lastName ?? user.lastName;
-    user.role = body.role ?? user.role;
+  async deleteUser(id: number) {
+    try {
+      const user = await this.findUser(id);
+      if (!user) {
+        throw new NotFoundException('User was not found');
+      }
+      return await this.userReposistory.delete({ id });
+    } catch (error) {
+      console.log(error.message);
+      throw new Error('something unexpected happened');
+    }
+  }
 
-    user.password = await this.hashingProvider.hashPassword(
-      user.password ?? body.password,
-    );
-
-    return this.userReposistory.save(user);
+  async findUser(id: number): Promise<User | null> {
+    return await this.userReposistory.findOneBy({ id });
   }
 }

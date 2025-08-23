@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
@@ -32,5 +35,11 @@ export class UsersController {
     @Param('id', new ParseIntPipe()) userId: number,
   ) {
     return await this.userService.updateUser(updateUserDto, userId);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteUser(@Param('id') userId: number): Promise<void> {
+    await this.userService.deleteUser(userId);
   }
 }
