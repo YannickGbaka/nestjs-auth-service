@@ -5,6 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { BcryptHashingProvider } from 'src/auth/bcrypt-hashing.provider';
 import { HashingProvider } from 'src/auth/hashing.provider';
+import { JwtModule } from '@nestjs/jwt';
+import authConfig from 'src/auth/config/auth.config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   controllers: [UsersController],
@@ -17,6 +20,10 @@ import { HashingProvider } from 'src/auth/hashing.provider';
       useClass: BcryptHashingProvider,
     },
   ],
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    ConfigModule.forFeature(authConfig),
+    JwtModule.registerAsync(authConfig.asProvider()),
+  ],
 })
 export class UsersModule {}
