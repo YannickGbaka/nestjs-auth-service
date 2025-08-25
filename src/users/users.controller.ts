@@ -16,20 +16,20 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { RoleGuard } from 'src/auth/guards/role.guard';
+import { Role } from 'src/types/role.enum';
+import { Roles } from 'src/decorators/role.decorator';
 
 @Controller('users')
+@UseGuards(AuthGuard)
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
-  @UseGuards(AuthGuard)
   @Get('')
+  @UseGuards(RoleGuard)
+  @Roles(Role.ADMIN)
   getUsers() {
     return this.userService.getUsers();
-  }
-
-  @Post('')
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.userService.createUser(createUserDto);
   }
 
   @Patch(':id')
