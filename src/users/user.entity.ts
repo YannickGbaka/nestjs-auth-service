@@ -56,4 +56,15 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  static basicFieldsToSelect = [
+    'id',
+    'email',
+    'firstName',
+    'lastName',
+    'role',
+    'birthDate',
+    'createdAt',
+    'updatedAt',
+  ];
 }

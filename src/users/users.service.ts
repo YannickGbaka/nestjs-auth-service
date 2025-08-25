@@ -4,7 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { FindOptionsSelect, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -20,7 +20,9 @@ export class UsersService {
   ) {}
   async getUsers() {
     try {
-      return this.userReposistory.find();
+      return this.userReposistory.find({
+        select: User.basicFieldsToSelect as FindOptionsSelect<User>,
+      });
     } catch (error) {
       console.log(error.message);
       throw new Error('Something unexpected happended, please try out later');
@@ -31,15 +33,7 @@ export class UsersService {
     try {
       const user = await this.userReposistory.findOne({
         where: { id },
-        select: [
-          'id',
-          'firstName',
-          'lastName',
-          'email',
-          'birthDate',
-          'createdAt',
-          'role',
-        ],
+        select: User.basicFieldsToSelect as FindOptionsSelect<User>,
       });
       if (!user) {
         throw new NotFoundException('User was not found');
