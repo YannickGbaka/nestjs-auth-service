@@ -32,6 +32,11 @@ export class UsersController {
     return this.userService.getUsers();
   }
 
+  @Get(':id')
+  profile(@Param('id', new ParseIntPipe()) id: number) {
+    return this.userService.getProfile(id);
+  }
+
   @Patch(':id')
   async updateUser(
     @Body() updateUserDto: UpdateUserDto,
@@ -42,7 +47,9 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param('id') userId: number): Promise<void> {
+  async deleteUser(
+    @Param('id', new ParseIntPipe()) userId: number,
+  ): Promise<void> {
     await this.userService.deleteUser(userId);
   }
 }

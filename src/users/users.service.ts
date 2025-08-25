@@ -27,6 +27,30 @@ export class UsersService {
     }
   }
 
+  async getProfile(id: number) {
+    try {
+      const user = await this.userReposistory.findOne({
+        where: { id },
+        select: [
+          'id',
+          'firstName',
+          'lastName',
+          'email',
+          'birthDate',
+          'createdAt',
+          'role',
+        ],
+      });
+      if (!user) {
+        throw new NotFoundException('User was not found');
+      }
+      return user;
+    } catch (e) {
+      console.log(e.message);
+      throw Error('Internal server error, please try again later');
+    }
+  }
+
   async createUser(createUserDto: CreateUserDto) {
     try {
       const existingUser = await this.userReposistory.findOne({
