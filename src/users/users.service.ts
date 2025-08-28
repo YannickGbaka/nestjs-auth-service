@@ -8,14 +8,12 @@ import { FindOptionsSelect, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { BcryptHashingProvider } from 'src/auth/bcrypt-hashing.provider';
-import { HashingProvider } from 'src/auth/hashing.provider';
+import { HashingProvider } from '../auth/hashing.provider';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userReposistory: Repository<User>,
-    private readonly bcryptProvider: BcryptHashingProvider,
     protected readonly hashingProvider: HashingProvider,
   ) {}
   async getUsers() {

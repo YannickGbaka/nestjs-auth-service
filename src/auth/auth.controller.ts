@@ -7,7 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from 'src/users/dtos/create-user.dto';
+import { CreateUserDto } from '../users/dtos/create-user.dto';
 import { AuthUserDto } from './dtos/auth-user.dto';
 
 @Controller('auth')

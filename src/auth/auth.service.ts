@@ -4,8 +4,8 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { CreateUserDto } from 'src/users/dtos/create-user.dto';
-import { UsersService } from 'src/users/users.service';
+import { CreateUserDto } from '../users/dtos/create-user.dto';
+import { UsersService } from '../users/users.service';
 import { AuthUserDto } from './dtos/auth-user.dto';
 import { HashingProvider } from './hashing.provider';
 import { JwtService } from '@nestjs/jwt';

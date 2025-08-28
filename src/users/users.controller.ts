@@ -16,11 +16,11 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
-import { RoleGuard } from 'src/auth/guards/role.guard';
-import { Role } from 'src/types/role.enum';
-import { Roles } from 'src/decorators/role.decorator';
-import { LoggingInteceptor } from 'src/interceptors/logging.interceptor';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { RoleGuard } from '../auth/guards/role.guard';
+import { Role } from '../types/role.enum';
+import { Roles } from '../decorators/role.decorator';
+import { LoggingInteceptor } from '../interceptors/logging.interceptor';
 
 @UseInterceptors(LoggingInteceptor)
 @Controller('users')

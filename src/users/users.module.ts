@@ -3,10 +3,10 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { BcryptHashingProvider } from 'src/auth/bcrypt-hashing.provider';
-import { HashingProvider } from 'src/auth/hashing.provider';
+import { BcryptHashingProvider } from '../auth/bcrypt-hashing.provider';
+import { HashingProvider } from '../auth/hashing.provider';
 import { JwtModule } from '@nestjs/jwt';
-import authConfig from 'src/auth/config/auth.config';
+import authConfig from '../auth/config/auth.config';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
